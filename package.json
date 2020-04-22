@@ -18,5 +18,12 @@
   "homepage": "https://github.com/TheCatster/CLC2#readme",
   "devDependencies": {
     "electron": "^8.2.3"
+  },
+  "dependencies": {
+    "katex": "^0.11.1",
+    "mathjax-node": "^2.1.1",
+    "mathjs": "^6.6.4",
+    "mathsteps": "^0.2.0",
+    "numbers": "^0.7.0"
   }
 }

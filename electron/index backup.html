@@ -4,15 +4,14 @@
     <meta charset="UTF-8">
     <title>CLC2 - The LaTeX Calculator</title>
     <link href="style/style.css" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="style/katex.min.css">
-
-    <!-- The loading of KaTeX is deferred to speed up page rendering -->
-    <script defer src="style/katex.min.js"></script>
   </head>
+  <script type="module">
+    import latexjs from "https://cdn.jsdelivr.net/npm/latex.js/dist/latex.component.esm.js"
+    customElements.define('latex-js', latexjs)
+  </script>
   <div>
-    <h1>🧮 CLC2</h1>
-    <p class="latex" id="output">Made for higher math students,<br> by a higher math student.</p>
-    <p class="latex" id="solution"></p>
+    <h1 class="header">🧮 CLC2</h1>
+    <p class="header">Made for higher math students,<br> by a higher math student.</p>
   </div>
   <body>
       <form class="calculatorbasic" name="bcalc">
@@ -22,10 +21,10 @@
          <span class="num minus" onclick="minus()">-</span>
          <span class="num divide" onclick="div()">/</span>
          <span class="num multiply" onclick="mult()">*</span>
-         <span class="num decimal" onclick="decimal()">.</span>
-         <span class="num sqrt" onclick="sqrt()">√ x</span>
-         <span class="num sqrd" onclick="sqrd()">x^2</span>
-         <span class="num negate" onclick="negate()">+/-</span>
+         <span class="num" onclick="decimal()">.</span>
+         <span class="num" onclick="sqrt()">√ x</span>
+         <span class="num" onclick="sqrd()">x^2</span>
+         <span class="num" onclick="negate()">+/-</span>
          <span class="num" onclick="nine()">9</span>
          <span class="num" onclick="eight()">8</span>
          <span class="num" onclick="seven()">7</span>
@@ -45,5 +44,6 @@
          <span class="num" onclick="zero()">0</span>
          <span class="num equal" onclick="solve()">=</span>
   </body>
+
   <script src="calculations.js"></script>
 </html>
