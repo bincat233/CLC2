@@ -1,192 +1,114 @@
 const katex = require('katex');
-const Algebrite = require('algebrite')
-const maths = {
-    '\\frac{d': (z) => Algebrite.eval('d('+String(z)+')').toString(),
-}
+const Algebrite = require('algebrite');
 
 let x = "0"
 let y = "0"
-let op = ""
-let solution = ""
 let equation = ""
+let solution = ""
 let ans = ''
-let raw = ""
-
 
 //function that evaluates the digit and return result
 function solve()
 {
     equation = document.bcalc.txt.value
 
-    if(equation.startsWith('!')){ //TODO: Actually make the step-by-step mode
-        equation = equation.replace('!', '')
-        solution = equation
-
-        if(solution.startsWith('\\frac{d')){ //Derivative, with respect to X
-            solution = solution.substring(solution.indexOf("("))
-            solution = solution.replace(/(\\left)|(\\right)/g, "")
-            if(solution.includes('\\cdot')){
-                solution = solution.replace(/\\cdot/g, "*")
-            }
-            if(solution.includes('\\frac{')){
-                solution = solution.replace(/\\frac/g, '')
-                solution = solution.replace(/(\{)/g, '(')
-                solution = solution.replace(/\}/g, ')')
-            }
-            if(solution.includes('{') || solution.includes('}')){
-                solution = solution.replace(/(\{)/g, '(')
-                solution = solution.replace(/\}/g, ')')
-            }
-            if(solution.includes('x')){
-                raw = String(maths['\\frac{d'](solution, 'x'))
-            }
-            var ans = katex.renderToString(raw, {
-                throwOnError: false
-            });
-        }
-
-        if(solution.startsWith('\\int')){ //Integral, with respect to X
-            solution = solution.substring(solution.indexOf(":")+1)
-            solution = solution.replace(/(\\left)|(\\right)/g, "")
-            console.log(solution)
-        }
-
-        document.getElementById("solution").innerHTML = "Solution: "+ans
-    }
-    else if(!(equation.startsWith('!'))){
-        document.getElementById("solution").innerHTML = ''
+    if(equation.startsWith('deriv')){
+        derivative()
     }
 
-    var html = katex.renderToString(equation, {
+    else if(equation.startsWith('int')){
+        integral()
+    }
+
+    else if(equation.startsWith('factor')){
+        factor()
+    }
+
+    else if(equation.includes('tan')){
+        tan()
+    }
+
+    else if(equation.includes('+') || equation.includes('-') || equation.includes('*') || equation.includes('/')){
+        basic()
+    }
+
+
+    let ans = katex.renderToString(solution, {
         throwOnError: false
     });
 
+    let html = katex.renderToString(equation, {
+        throwOnError: false
+    });
+
+    document.getElementById("solution").innerHTML = "Solution: "+ans
     document.getElementById("output").innerHTML = "Problem: "+html
-    /*else{
-        x = eval(x+op+y)
-        document.bcalc.txt.value = x.toFixed(3).replace('.000', '')
-        op = ""
-    }*/
 }
 
-//function that clear the display
-function clr()
-{
+
+function clr(){ //Function to clear the calculator's display
     document.bcalc.txt.value =''
 }
 
-function add(){
-    x = bcalc.txt.value
-    op = '+'
+function derivative(){ //Function to compute and return the derivative, with respect to X
+    solution = equation
+    solution = solution.replace(/deriv/g, '')
+    solution = Algebrite.eval(`d${solution}`)
+    solution = Algebrite.simplify(solution).toString()
+    equation = equation.replace(/deriv\(/g, '\{dy \\over dx\} ')
+    equation = equation.slice(0, equation.lastIndexOf(')'))
 }
 
-function minus(){
-    x = bcalc.txt.value
-    op = '-'
+function integral(){ //Function to compute and return the indefinite integral, with respect to X
+    solution = equation
+    solution = solution.replace(/int/g, '')
+    solution = Algebrite.eval(`integral${solution}`)
+    solution = Algebrite.simplify(solution).toString()
+    equation = equation.replace(/int\(/g, '\\int ')
+    equation = equation.slice(0, equation.lastIndexOf(')')) + 'dx.'
 }
 
-function mult(){
-    x = bcalc.txt.value
-    op = '*'
+function factor(){ //Function to factor given equation or polynomial
+    solution = equation
+    solution = solution.replace(/factor/g, '')
+    solution = Algebrite.factor(solution).toString()
+    equation = equation.replace(/factor/g, '')
 }
 
-function div(){
-    x = bcalc.txt.value
-    op = '/'
-}
+function tan(){
+    let index = 0
+    solution = equation
 
-function decimal(){
-    if((op == "+") || (op == "-") || (op == "/") || (op == "*")){
-        clr()
+    solution = solution.replace(/tan/g, '')
+    if(equation.includes('+') || equation.includes('-') || equation.includes('/') || equation.includes('*')){
+        for(let i = 0; i < equation.length; i++){
+            if(equation.indexOf('+') > 0){
+                index = equation.indexOf('+')
+                break
+            }
+            if(equation.indexOf('-') > 0){
+                index = equation.indexOf('-')
+                break
+            }
+            if(equation.indexOf('/') > 0){
+                index = equation.indexOf('/')
+                break
+            }
+            if(equation.indexOf('*') > 0){
+                index = equation.indexOf('*')
+                break
+            }
+        }
+
+        solution = solution.slice(solution.indexOf('n')+1, index)
     }
-    document.bcalc.txt.value +='.'
-    y = bcalc.txt.value
+
+    solution = Algebrite.tan(solution)
+    solution = Algebrite.simplify(solution).toString()
 }
 
-function zero2(){
-    if((op == "+") || (op == "-") || (op == "/") || (op == "*")){
-        clr()
-    }
-    document.bcalc.txt.value +='00'
-    y = bcalc.txt.value
-}
-
-function zero(){
-    if((op == "+") || (op == "-") || (op == "/") || (op == "*")){
-        clr()
-    }
-    document.bcalc.txt.value +='0'
-    y = bcalc.txt.value
-}
-
-function one(){
-    if((op == "+") || (op == "-") || (op == "/") || (op == "*")){
-        clr()
-    }
-    document.bcalc.txt.value +='1'
-    y = bcalc.txt.value
-}
-
-function two(){
-    if((op == "+") || (op == "-") || (op == "/") || (op == "*")){
-        clr()
-    }
-    document.bcalc.txt.value +='2'
-    y = bcalc.txt.value
-}
-
-function three(){
-    if((op == "+") || (op == "-") || (op == "/") || (op == "*")){
-        clr()
-    }
-    document.bcalc.txt.value +='3'
-    y = bcalc.txt.value
-}
-
-function four(){
-    if((op == "+") || (op == "-") || (op == "/") || (op == "*")){
-        clr()
-    }
-    document.bcalc.txt.value +='4'
-    y = bcalc.txt.value
-}
-
-function five(){
-    if((op == "+") || (op == "-") || (op == "/") || (op == "*")){
-        clr()
-    }
-    document.bcalc.txt.value +='5'
-    y = bcalc.txt.value
-}
-
-function six(){
-    if((op == "+") || (op == "-") || (op == "/") || (op == "*")){
-        clr()
-    }
-    document.bcalc.txt.value +='6'
-    y = bcalc.txt.value
-}
-
-function seven(){
-    if((op == "+") || (op == "-") || (op == "/") || (op == "*")){
-        clr()
-    }
-    document.bcalc.txt.value +='7'
-    y = bcalc.txt.value
-}
-
-function eight(){
-    if((op == "+") || (op == "-") || (op == "/") || (op == "*")){
-        clr()
-    }
-    document.bcalc.txt.value +='8'
-    y = bcalc.txt.value
-}
-
-function nine(){
-    if((op == "+") || (op == "-") || (op == "/") || (op == "*")){
-        clr()
-    }
-    document.bcalc.txt.value +='9'
-    y = bcalc.txt.value
+function basic(){ //Function to do any basic calculations
+    solution = equation
+    solution = Algebrite.run(solution)
+    solution = Algebrite.simplify(solution).toString()
 }
