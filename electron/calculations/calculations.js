@@ -1,15 +1,16 @@
 const katex = require('katex');
-const { derivative } = require('mathjs')
-const numbers = require('numbers');
+const Algebrite = require('algebrite')
 const maths = {
-    '{d': (z) => derivative(z, 'x'),
+    '\\frac{d': (z) => Algebrite.eval('d('+String(z)+')').toString(),
 }
 
 let x = "0"
 let y = "0"
 let op = ""
-let ans = ""
+let solution = ""
 let equation = ""
+let ans = ''
+let raw = ""
 
 
 //function that evaluates the digit and return result
@@ -17,25 +18,55 @@ function solve()
 {
     equation = document.bcalc.txt.value
 
-    if(equation.startsWith("$")){
-        equation = equation.replace('$', "")
+    if(equation.startsWith('!')){ //TODO: Actually make the step-by-step mode
+        equation = equation.replace('!', '')
+        solution = equation
 
-        var html = katex.renderToString(equation, {
-            throwOnError: false
-        });
+        if(solution.startsWith('\\frac{d')){ //Derivative, with respect to X
+            solution = solution.substring(solution.indexOf("("))
+            solution = solution.replace(/(\\left)|(\\right)/g, "")
+            if(solution.includes('\\cdot')){
+                solution = solution.replace(/\\cdot/g, "*")
+            }
+            if(solution.includes('\\frac{')){
+                solution = solution.replace(/\\frac/g, '')
+                solution = solution.replace(/(\{)/g, '(')
+                solution = solution.replace(/\}/g, ')')
+            }
+            if(solution.includes('{') || solution.includes('}')){
+                solution = solution.replace(/(\{)/g, '(')
+                solution = solution.replace(/\}/g, ')')
+            }
+            if(solution.includes('x')){
+                raw = String(maths['\\frac{d'](solution, 'x'))
+            }
+            var ans = katex.renderToString(raw, {
+                throwOnError: false
+            });
+        }
 
-        const ans = "maths['{d'](equation)"
+        if(solution.startsWith('\\int')){ //Integral, with respect to X
+            solution = solution.substring(solution.indexOf(":")+1)
+            solution = solution.replace(/(\\left)|(\\right)/g, "")
+            console.log(solution)
+        }
 
-        document.getElementById("output").innerHTML = "Problem: "+html
         document.getElementById("solution").innerHTML = "Solution: "+ans
     }
-    else{
+    else if(!(equation.startsWith('!'))){
+        document.getElementById("solution").innerHTML = ''
+    }
+
+    var html = katex.renderToString(equation, {
+        throwOnError: false
+    });
+
+    document.getElementById("output").innerHTML = "Problem: "+html
+    /*else{
         x = eval(x+op+y)
         document.bcalc.txt.value = x.toFixed(3).replace('.000', '')
         op = ""
-    }
-
-    //ans = solution()
+    }*/
 }
 
 //function that clear the display
