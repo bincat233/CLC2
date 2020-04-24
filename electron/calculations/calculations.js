@@ -1,16 +1,24 @@
 const katex = require('katex');
 const Algebrite = require('algebrite');
 
-let x = "0"
-let y = "0"
 let equation = ""
 let solution = ""
-let ans = ''
+let format = ""
+let piformatneed = false
 
 //function that evaluates the digit and return result
 function solve()
 {
+    piformatneed = false
+
     equation = document.bcalc.txt.value
+
+    solution = equation
+
+    if(equation.includes('pi')){
+        pi()
+        piformatneed = true
+    }
 
     if(equation.startsWith('deriv')){
         derivative()
@@ -24,14 +32,13 @@ function solve()
         factor()
     }
 
-    else if(equation.includes('tan')){
-        tan()
+    else if(equation.includes('tan') || equation.includes('sin') || equation.includes('cos') || equation.includes('sec') || equation.includes('csc') || equation.includes('cot')){
+        trig()
     }
 
     else if(equation.includes('+') || equation.includes('-') || equation.includes('*') || equation.includes('/')){
         basic()
     }
-
 
     let ans = katex.renderToString(solution, {
         throwOnError: false
@@ -51,64 +58,56 @@ function clr(){ //Function to clear the calculator's display
 }
 
 function derivative(){ //Function to compute and return the derivative, with respect to X
-    solution = equation
     solution = solution.replace(/deriv/g, '')
     solution = Algebrite.eval(`d${solution}`)
     solution = Algebrite.simplify(solution).toString()
+    if(piformatneed){
+        piformat()
+    }
     equation = equation.replace(/deriv\(/g, '\{dy \\over dx\} ')
     equation = equation.slice(0, equation.lastIndexOf(')'))
 }
 
 function integral(){ //Function to compute and return the indefinite integral, with respect to X
-    solution = equation
     solution = solution.replace(/int/g, '')
     solution = Algebrite.eval(`integral${solution}`)
     solution = Algebrite.simplify(solution).toString()
+    if(piformatneed){
+        piformat()
+    }
     equation = equation.replace(/int\(/g, '\\int ')
     equation = equation.slice(0, equation.lastIndexOf(')')) + 'dx.'
 }
 
 function factor(){ //Function to factor given equation or polynomial
-    solution = equation
     solution = solution.replace(/factor/g, '')
     solution = Algebrite.factor(solution).toString()
+    if(piformatneed){
+        piformat()
+    }
     equation = equation.replace(/factor/g, '')
 }
 
-function tan(){
-    let index = 0
-    solution = equation
-
-    solution = solution.replace(/tan/g, '')
-    if(equation.includes('+') || equation.includes('-') || equation.includes('/') || equation.includes('*')){
-        for(let i = 0; i < equation.length; i++){
-            if(equation.indexOf('+') > 0){
-                index = equation.indexOf('+')
-                break
-            }
-            if(equation.indexOf('-') > 0){
-                index = equation.indexOf('-')
-                break
-            }
-            if(equation.indexOf('/') > 0){
-                index = equation.indexOf('/')
-                break
-            }
-            if(equation.indexOf('*') > 0){
-                index = equation.indexOf('*')
-                break
-            }
-        }
-
-        solution = solution.slice(solution.indexOf('n')+1, index)
+function trig(){
+    solution = Algebrite.eval(solution).toString()
+    if(piformatneed){
+        piformat()
     }
-
-    solution = Algebrite.tan(solution)
-    solution = Algebrite.simplify(solution).toString()
 }
 
 function basic(){ //Function to do any basic calculations
-    solution = equation
     solution = Algebrite.run(solution)
     solution = Algebrite.simplify(solution).toString()
+    if(piformatneed){
+        piformat()
+    }
+}
+
+function pi(){
+    format = equation
+    equation = equation.replace(/pi/g, Math.PI)
+}
+
+function piformat(){
+    equation = format
 }
