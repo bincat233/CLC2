@@ -4,6 +4,13 @@
 Symbolab is great, and so is Wolfram Alpha and all of those web calculators that let you do all your higher math. But wouldn't it be nice if an offline version existed? Here enters CLC2, the next evolution of (you guessed it) CLC (or autofoiler for those of you who used it way back). *I understand that Symbolab will almost always be better, but that's not the point, we should all work together to make the best free, opensource offline version!*
 
 ## Future Improvements!
+- [x] Derivatives
+- [x] Indefinite Integrals
+- [x] Square Roots
+- [x] Basic Math (xD)
+- [x] Trigonometric Functions
+- [x] Radians (Answer are given in)
+- [x] Fractions, and simplifying them
 - [ ] Matrices
 - [x] Definite Integrals (with multiple variables)
 - [ ] Gradients
