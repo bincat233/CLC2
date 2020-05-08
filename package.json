@@ -1,6 +1,6 @@
 {
   "name": "clc2",
-  "productName": "CLC 2",
+  "productName": "clc2",
   "version": "0.1.0",
   "description": "Calculus-ator, reimagined",
   "main": "./electron/main.js",
