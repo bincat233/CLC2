@@ -5,6 +5,9 @@
 CLC2 was originally born as Autofoiler, a simple python CLI script that multiplied binomials for you. As I progressed through math classes, I learned more and wanted to expand this program. It then went through many iterations, and became Calculus-ator, a GUI based derivative, integral, and equation solver... Long story short it was a mess. The binomial feature still worked, but everything else was half baked.<br/><br/>
 About a week ago, I started preparing for exams. I thought, wouldn't it be cool if that Calculus-ator program actually did something good for a change? CLC2 (A mistake of shortening Calculus-ator 2) was born.<br/><br/>
 But what is it? Glad you asked. CLC2 is an Electron-based crossplatform CAS calculator, that displays in LaTeX. Essentially, an offline version of Symbolab. Need to solve a definite integral with respect to y? Plug it into CLC2. Need to find the derivative of sin(x\*6x)? Plug it into CLC2.
+## Screenshots!
+![Main View MacOS](/images/scs1.png)
+![Calculator View MacOS](/images/scs2.png)
 ## Features
 - [x] Derivatives
 - [x] Indefinite Integrals
