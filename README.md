@@ -35,4 +35,4 @@ There are two major ways you can contribute:
 ## Using CLC2
 As of now, using CLC2 is very easy. In the release tab, you can download the latest stable version or the highly-unstable ride on the edge version. You can download a .exe installer, a .dmg, or a .deb. Check out the wiki for functions, though most are fairly simple.
 ## Building
-Building CLC2 is very easy, simply clone the repository and run `npm install`. To build a .exe run `npm run package-win`, for a .app `npm run package-mac` and for whatever a linux is `npm run package-linux`. To create installers, do `npm run create-installer-win` for a .exe installer, `npm run create-installer-mac` for a .dmg, and `npm run create-installer-debian` for a .deb.
+Building CLC2 is very easy, simply clone the repository and run `npm install`. To build a .exe run `npm run package-win`, for a .app `npm run package-mac` and for whatever a linux is `npm run package-linux`. To create installers, do `npm run create-installer-win` for a .exe installer, `npm run create-installer-mac` for a .dmg, and `npm run create-installer-debian` for a .deb. CLC2 uses the Algebrite CAS library.
