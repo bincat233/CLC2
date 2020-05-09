@@ -33,6 +33,6 @@ There are two major ways you can contribute:
 - Donate! Think about it, although CLC2 is not yet as powerful as Symbolab, your donation, no matter how large, is benefitting students all over! A symbolab membership alone is 12 dollars a year, and doesn't work offline!<br/><br/>
 **Both are equally important, and help ensure the success of this project. Community involvement is what opensource strides to be, and all students in math could benefit from such a free, open-source project.**
 ## Using CLC2
-As of now, using CLC2 is very easy. In the release tab, you can download the latest stable version or the highly-unstable ride on the edge version. You can download a .exe installer, a .dmg, or a .deb.
+As of now, using CLC2 is very easy. In the release tab, you can download the latest stable version or the highly-unstable ride on the edge version. You can download a .exe installer, a .dmg, or a .deb. Check out the wiki for functions, though most are fairly simple.
 ## Building
 Building CLC2 is very easy, simply clone the repository and run `npm install`. To build a .exe run `npm run package-win`, for a .app `npm run package-mac` and for whatever a linux is `npm run package-linux`. To create installers, do `npm run create-installer-win` for a .exe installer, `npm run create-installer-mac` for a .dmg, and `npm run create-installer-debian` for a .deb.
